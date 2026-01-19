@@ -1,0 +1,29 @@
+@use 'sass:math';
+
+@function rem($pixel) {
+  @if math.is-unitless($pixel) {
+    @return math.div($pixel, 16) + rem;
+  } @else {
+    @error 'Do not use units of measurement when working with the rem() function! Pass only numbers as arguments.'
+  }
+};
+
+@function fluid($max: 100, $min: 10) {
+    $maxViewportWidth: 1920;
+    $minViewportWidth: 390;
+
+    $maxSize: math.div($max, 16);
+    $maxSize: math.div($min, 16);
+
+    $maxSize: math.div($maxViewportWidth, 16);
+    $maxSize: math.div($minViewportWidth, 16);
+
+    $slope: math.div(($maxSize - $minSize), ($maxWidth - $minWidth));
+    $yAxisIntersection: -$minWidth * $slope + $minSize;
+
+    @return clamp(
+        #{$minSize * 1rem},
+        #{$yAxisIntersection * 1rem} + #{$slope * 100vh},
+        #{$maxSize * 1rem}
+    );
+}
